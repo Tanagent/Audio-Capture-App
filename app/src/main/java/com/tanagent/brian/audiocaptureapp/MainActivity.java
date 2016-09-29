@@ -5,11 +5,14 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import java.io.IOException;
 import java.util.Random;
+import java.util.UUID;
+
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import android.support.v4.app.ActivityCompat;
@@ -22,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     String AudioSavePathInDevice = null;
     MediaRecorder mediaRecorder ;
     Random random ;
-    String RandomAudioFileName = "ABCDEFGHIJKLMNOP";
+    String RandomAudioFileName;
     public static final int RequestPermissionCode = 1;
     MediaPlayer mediaPlayer ;
 
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 if(checkPermission()) {
 
                     AudioSavePathInDevice = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + CreateRandomAudioFileName(5) + "AudioRecording.3gp";
+                    Log.i("TAG", "onClick: " + AudioSavePathInDevice.toString());
 
                     MediaRecorderReady();
 
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         buttonStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Log.i("RANDOM STRING", randomStringGenerator());
                 mediaRecorder.stop();
 
                 buttonStop.setEnabled(false);
@@ -156,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
     public String CreateRandomAudioFileName(int string){
 
         StringBuilder stringBuilder = new StringBuilder( string );
+        RandomAudioFileName = randomStringGenerator();
 
         int i = 0 ;
         while(i < string ) {
@@ -166,6 +171,10 @@ public class MainActivity extends AppCompatActivity {
         }
         return stringBuilder.toString();
 
+    }
+
+    public String randomStringGenerator() {
+        return UUID.randomUUID().toString();
     }
 
     private void requestPermission() {
